@@ -1,4 +1,4 @@
-var gulp        = require('gulp');
+var gulp = require('gulp');
 var browserSync = require('browser-sync').create();
 var sourcemaps = require("gulp-sourcemaps");
 var babel = require("gulp-babel");
@@ -9,13 +9,13 @@ const clientPath = 'client-src';
 const clientDestPath = 'client-dest';
 const resource = [
     `${clientPath}/**/*.{html,css}`,
-    `${clientPath}/{img,attachment}/*.*`
+    `${clientPath}/{img,font,attachment}/*.*`
 ];
 // Static server
-gulp.task('browser-sync', function() {
-    
+gulp.task('browser-sync', function () {
+
 });
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     browserSync.init({
         server: {
             baseDir: `./${clientDestPath}`
@@ -33,12 +33,12 @@ gulp.task('build-js', function () {
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(`${clientDestPath}/js`));
 });
-gulp.task('resource', function() {
+gulp.task('resource', function () {
     return gulp.src(resource)
         .pipe(gulp.dest(`${clientDestPath}/`));
 });
 gulp.task('default', ['build-js', 'resource']);
-gulp.task('clean', function() {
+gulp.task('clean', function () {
     return gulp.src(`${clientDestPath}`)
         .pipe(clean());
 });
