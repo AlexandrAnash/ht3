@@ -1,39 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Киноглушитель</title>
-	<meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width">
+    <title></title>
+    <meta charset="utf-8"/>
     <link href="css/reset.css" rel="stylesheet" />
     <link href="css/main.css" rel="stylesheet" />
 </head>
     <body>
-        <div class="content">
-            <div class="move-silencer">
-                <div class="header move-silencer__header">
-                    <h1 class="header__text">
-                        Киноглушитель
-                    </h1>
-                    <img src="img/gun.png"
-                         class="header__logo" />
-                </div>
-                <form class="move-silencer__content">
-                    <input type="text"
-                           class="form-control move-silencer__link-video" />
+        <div class="player-content">
+            <canvas id="player-canvas" 
+                    class="player-canvas"></canvas>
+            <video id="player"
+                   class="player"
+                   controls>
+                <source src="attachment/sherlock.mp4"
+                        type=video/mp4>
+                <source src="attachment/sherlock.ogg"
+                        type="video/ogg">
+                <source src="attachment/sherlock.webm"
+                        type="video/webm">
+            </video>
 
-                    <input type="text"
-                           class="form-control move-silencer__link move-silencer__link-sub" />
-
-                    <input type="text"
-                           class="form-control move-silencer__link move-silencer__link-sound" />
-
-                    <button class="btn btn-yelow move-silencer__submit">
-                        Заглушить
-                    </button>
-                </form>
+            <video id="overlay-canvas"
+                   class="overlay-canvas"
+                   controls
+                   loop>
+                <source src="attachment/overlay.mp4"
+                        type=video/mp4>
+            </video>
+            <audio>
+                <source src="attachment/Scott_Joplin.ogg"
+                        type=audio/ogg>
+            </audio>
+            <div class="player-controls">
+                <button id="player-play" 
+                        class="btn">play</button>
+                <button id="player-pause" 
+                        class="btn">pause</button>
+                <button id="player-restart" 
+                        class="btn">restart</button>
             </div>
         </div>
-
 
         <script src="js/app.js"></script>
     </body>

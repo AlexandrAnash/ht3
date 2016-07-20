@@ -102,10 +102,15 @@
   <ItemGroup>
     <Content Include="client-src\css\main.css" />
     <Content Include="client-src\font\OFL.txt" />
-    <Content Include="client-src\index.html" />
+    <Content Include="client-src\index_.html" />
     <Content Include="client-src\js\app.js" />
+    <Content Include="client-src\js\overlayEffect.js" />
+    <Content Include="client-src\js\Player.js" />
     <Content Include="client-src\js\processor.js" />
-    <Content Include="client-src\video.html" />
+    <Content Include="client-src\index.html" />
+    <Content Include="client-src\js\Subtitle.js" />
+    <Content Include="client-src\js\subtitlesFactory.js" />
+    <Content Include="client-src\js\subtitlesService.js" />
     <Content Include="gulpfile.js" />
   </ItemGroup>
   <ItemGroup>

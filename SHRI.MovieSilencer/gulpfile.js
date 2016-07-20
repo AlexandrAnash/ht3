@@ -34,6 +34,10 @@ gulp.task('build-js', function () {
     return browserify({ entries: `${clientPath}/js/app.js`, extensions: ['.js'], debug: true })
         .transform('babelify', { presets: ['es2015'] })
         .bundle()
+        .on('error', function (err) {
+            console.log(err.message);
+            this.emit('end');
+        })
         .pipe(source('app.js'))
         .pipe(gulp.dest(`${clientDestPath}/js`));
 });
