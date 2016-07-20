@@ -5,6 +5,10 @@ var babel = require("gulp-babel");
 var concat = require("gulp-concat");
 var clean = require("gulp-clean");
 
+var browserify = require('browserify');
+var babelify = require('babelify');
+var source = require('vinyl-source-stream');
+
 const clientPath = 'client-src';
 const clientDestPath = 'client-dest';
 const resource = [
@@ -27,11 +31,11 @@ gulp.task('watch', function () {
     gulp.watch(`${clientDestPath}/img/*.*`).on('change', browserSync.reload);
 });
 gulp.task('build-js', function () {
-    return gulp.src(`${clientPath}/js/app.js`)
-      .pipe(sourcemaps.init())
-      .pipe(babel())
-      .pipe(sourcemaps.write('.'))
-      .pipe(gulp.dest(`${clientDestPath}/js`));
+    return browserify({ entries: `${clientPath}/js/app.js`, extensions: ['.js'], debug: true })
+        .transform('babelify', { presets: ['es2015'] })
+        .bundle()
+        .pipe(source('app.js'))
+        .pipe(gulp.dest(`${clientDestPath}/js`));
 });
 gulp.task('resource', function () {
     return gulp.src(resource)
