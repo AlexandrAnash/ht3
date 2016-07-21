@@ -1,0 +1,79 @@
+
+@font-face {
+    font-family: 'Oranienbaum-Regular';
+    src: url(../font/Oranienbaum-Regular.ttf);
+}
+body {
+    font-family: 'Oranienbaum-Regular';
+    background-color: #d8d8d8;
+}
+
+.form-control {
+    padding: 5px;
+    height: 24px;
+    -webkit-box-shadow: 0 3px 20px -5px #aaa;
+    -ms-box-shadow: 0 3px 20px -5px #aaa;
+    box-shadow: 0 3px 20px -5px #aaa;
+    border: 0;
+}
+.move-silencer {
+    height: 50vh;
+}
+.move-silencer__header {
+    display: inline-block;
+}
+.header__text {
+    font-size: 2rem;
+    display: inline-block;
+}
+.header__logo {
+    display: inline-block;
+    margin-left: 20px;
+}
+.move-silencer__link {
+    display: block;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    
+}
+
+.btn {
+    -webkit-box-shadow: 0 3px 20px -5px #aaa;
+    -ms-box-shadow: 0 3px 20px -5px #aaa;
+    box-shadow: 0 3px 20px -5px #aaa;
+    color: #171307;
+    padding: 10px;
+    border: none;
+}
+.btn-yellow {
+    background-color: #FFDB4D;
+}
+
+.form-control::-webkit-input-placeholder       {opacity: 1; transition: opacity 0.3s ease; color: #aaa }
+.form-control::-moz-placeholder                {opacity: 1; transition: opacity 0.3s ease; color: #aaa }
+.form-control:-moz-placeholder                 {opacity: 1; transition: opacity 0.3s ease; color: #aaa }
+.form-control:-ms-input-placeholder            {opacity: 1; transition: opacity 0.3s ease; color: #aaa }
+.form-control:focus::-webkit-input-placeholder {opacity: 0; transition: opacity 0.3s ease;}
+.form-control:focus::-moz-placeholder          {opacity: 0; transition: opacity 0.3s ease;}
+.form-control:focus:-moz-placeholder           {opacity: 0; transition: opacity 0.3s ease;}
+.form-control:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.3s ease;}
+
+.player-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.player-canvas {
+    background-color: black;
+    width: 500px;
+    height: 300px;
+}
+.player {
+    display: none;
+
+}
+.overlay-canvas {
+    display: none;
+}
