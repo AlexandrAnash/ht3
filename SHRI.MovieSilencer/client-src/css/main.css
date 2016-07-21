@@ -71,8 +71,7 @@ body {
     height: 300px;
 }
 .player {
-    width: 500px;
-    height: 0;
+    display: none;
 
 }
 .overlay-canvas {

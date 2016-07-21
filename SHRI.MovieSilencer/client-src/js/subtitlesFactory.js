@@ -11,21 +11,24 @@ class SubtitlesFactory {
                 return responce.text();
             })
             .then((data) => {
-                let subtitles = [];
                 let srt = data.replace(/\r\n|\r|\n/g, '\n');
-                let count = 0;
-                const arrayStringSubtitles = srt.split('\n\n');
-                for (var i = 0; i < arrayStringSubtitles.length; i++) {
-                    const subparts = arrayStringSubtitles[i].split('\n');
-                    if(subparts.length > 2) {
-                        subtitles[count] = this.formattedToSubtitle(subparts);
-                    }
-                    count++;
-                }
-                return subtitles;
+                return srt 
+                    .split('\n\n')
+                    .map((subItem) => this.formattedToSubtitle(subItem));
             });
     }
 
+    formattedToSubtitle(data) {
+        const subparts = data.split('\n');
+        let time = subparts[1].split(' --> ').map((t) => this.timeParser(t));
+        return new Subtitle({
+            id: subparts[0],
+            startTime: time[0],
+            endTime: time[1],
+            message: subparts.slice(2).join('\n')
+        });
+    }
+    
     timeParser(timeString) {
         const chunks = timeString.split(':');
         const secondChunks = chunks[2].split(',');
@@ -37,23 +40,6 @@ class SubtitlesFactory {
             MINUTE * minutes +
             SECOND * seconds +
             milliSeconds;
-    }
-    formattedToSubtitle(subparts) {
-        const id = subparts[0];
-        const startTime = subparts[1].split(' --> ')[0];
-        const endTime = subparts[1].split(' --> ')[1];
-        let message = subparts[2];
-        if (subparts.length > 3) {
-            for (var j = 3; j < subparts.length; j++) {
-                message += '\n' + subparts[j];
-            }
-        }
-        return new Subtitle({
-            id: id,
-            timerStart: this.timeParser(startTime),
-            timerEnd: this.timeParser(endTime),
-            message: message
-        });
     }
 }
 export {SubtitlesFactory}

@@ -2,27 +2,28 @@
 import {SubtitlesFactory} from './subtitlesFactory';
 import {OverlayEffect} from './overlayEffect';
 import {Player} from './player';
+import {Audio} from './audio';
 import {Subtitle} from './Subtitle';
 
 document.addEventListener('DOMContentLoaded', ContentLoaded);
 function ContentLoaded() {
-    var subtitlesFactory = new SubtitlesFactory();
-    let player = new Player();
+    const subtitlesFactory = new SubtitlesFactory();
     return Promise.all([
         subtitlesFactory.loadSubtitles('attachment/subs.srt'),
-        player.load()
-    ]).then(function() {
-
-        let video = player.video;
-        let overlayEffect = new OverlayEffect();
-        let overlayVideo = overlayEffect.video;
+    ]).then(function(promiseData) {
+        const player = new Player();
+        const audio  = new Audio();
+        const subtitles = promiseData[0];
+        const video = player.video;
+        const overlayEffect = new OverlayEffect();
+        const overlayVideo = overlayEffect.video;
 
         var subtitlesService = new SubtitlesService(subtitles, player);
 
         let elementPlay = document.getElementById('player-play');
         let elementPause = document.getElementById('player-pause');
         let elementRestart = document.getElementById('player-restart');
-
+        let rifID;
         elementPlay.addEventListener('click', playPress.bind(this));
         elementPause.addEventListener('click', pausePress.bind(this));
         elementRestart.addEventListener('click', restartPress.bind(this));
@@ -30,37 +31,41 @@ function ContentLoaded() {
         function playPress() {
             elementPlay.classList.add('btn-yellow');
             elementPause.classList.remove('btn-yellow');
-            player.play();
-            requestAnimationFrame(loop);
-            overlayVideo.play();
-            subtitlesService.play(video.currentTime * 1000);
+            loop();
 
             function loop() {
-                if (!video.paused && !video.ended) {
-                    player.draw();
-                    player.postprocess(overlayVideo);
-                    requestAnimationFrame(loop);
-                }
                 subtitlesService.checkSubtitle(video.currentTime * 1000);
                 if (subtitlesService.isSubtitleShow) {
-                    video.pause();
+                    if (subtitlesService.isDraw === false) {
+                        player.pause();
+                        subtitlesService.play(overlayVideo);
+                    } else {
+                        subtitlesService.draw();
+                        player.postprocess.call(subtitlesService, overlayVideo);
+                    }
+                } else {
+                    player.play(overlayVideo);
+                    audio.play();
+                    overlayVideo.play();   
                 }
+                rifID = requestAnimationFrame(loop);
             };
-
         }
 
         function pausePress() {
             elementPlay.classList.remove('btn-yellow');
             elementPause.classList.add('btn-yellow');
-
+            cancelAnimationFrame(rifID);
             player.pause();
             overlayVideo.pause();
+            audio.pause();
+            subtitlesService.pause();
         }
 
         function restartPress() {
             player.restart();
-            overlayVideo.restart();
             subtitlesService.restart();
+            audio.restart();
         }
     });
 

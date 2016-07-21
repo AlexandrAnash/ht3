@@ -5,86 +5,64 @@ const SECOND = 1000,
     HOUR = 60 * MINUTE;
 
 class SubtitlesService {
-    constructor(subtitles, canvasContext, player) {
+    constructor(subtitles, player) {
         this.isPause = false;
         this.subtitles = subtitles;
-        this.resetSubtitle();
-        this.canvasContext = canvasContext;
+        this.restart();
+        this.canvasContext = player.canvasContext;
         this.player = player;
+        this.isDraw = false;
+
     }
     checkSubtitle(time) {
-        if (this.currentSub.timerStart <= time) {
+        if (this.isSubtitleShow) return;
+        if (this.currentSub.startTime <= time && this.currentSub.endTime >= time) {
             this.isSubtitleShow = true;
-            this.play(time);
-            this.player.pause();
         }
     }
-    play(time) {
-        if (this.isSubtitleShow) {
+    draw() {
+        const width = this.player.canvas.width;
+        const height = this.player.canvas.height;
+        const fontSize = 50;
+        this.canvasContext.fillStyle = '#000000';
+        this.canvasContext.font = `${fontSize}px Oranienbaum`;
+        this.canvasContext.fillRect(0, 0, width, height);
+        this.canvasContext.fillStyle = '#ffffff';
+        const lineHeight = 58;
 
+        this.currentSub.message
+			.split('\n')
+			.map((row, i) => {
+			    this.canvasContext.fillText(row, fontSize, fontSize + i * lineHeight);
+			});
+        this.isDraw = true;
+    }
+    play(overlayVideo) {
+        if (this.isSubtitleShow) {
             this.draw();
+            this.player.postprocess.call(this, overlayVideo);
             setTimeout(function() {
                 this.isSubtitleShow = false;
-                this.currentSub = this.subtitles[this.currentIndex++];
-                this.player.play();
-            }.bind(this), this.currentSub.timerEnd - time);    
+                this.currentIndex = this.subtitles.findIndex((item) => {
+                    if (item === this.currentSub) {
+                        return item;
+                    }
+                }) + 1;
+                this.currentSub = this.subtitles[this.currentIndex];
+                this.isDraw = false;
+                if (this.isPause) return;
+                this.player.video.play();
+            }.bind(this), this.currentSub.delay);    
         }
         
     }
     pause() {
         this.isPause = true;
     }
-    draw() {
-        let maxWidth = 600;
-        let lineHeight = 60;
-
-        this.canvasContext.textAlign = 'center';
-
-        this.canvasContext.font = '51px \'Oranienbaum\'';
-        this.canvasContext.fillStyle = 'white';
-        let x = 0;
-        let y = 0;
-        this.wrapText(this.canvasContext, this.currentSub.message, x, y, maxWidth, lineHeight);
-    }
-    resetSubtitle() {
+    restart() {
         this.isSubtitleShow = false;
         this.currentIndex = 0;
         this.currentSub = this.subtitles[this.currentIndex];
-    }
-    ////
-    wrapText(context, text, x, y, maxWidth, lineHeight) {
-        var cars;
-        var ii;
-        var line;
-        var words;
-        var testLine;
-        var metrics;
-        var testWidth;
-        var n;
-
-        cars = text.split('\n');
-
-        for (ii = 0; ii < cars.length; ii++) {
-            line = '';
-            words = cars[ii].split(' ');
-
-            for (n = 0; n < words.length; n++) {
-                testLine = line + words[n] + ' ';
-                metrics = context.measureText(testLine);
-                testWidth = metrics.width;
-
-                if (testWidth > maxWidth) {
-                    context.fillText(line, x, y);
-                    line = words[n] + ' ';
-                    y += lineHeight;
-                } else {
-                    line = testLine;
-                }
-            }
-
-            context.fillText(line, x, y);
-            y += lineHeight;
-        }
     }
 }
 export {SubtitlesService}

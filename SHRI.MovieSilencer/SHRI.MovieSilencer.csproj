@@ -96,21 +96,19 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="client-src\attachment\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="client-src\css\main.css" />
     <Content Include="client-src\font\OFL.txt" />
-    <Content Include="client-src\index_.html" />
+    <Content Include="client-src\index.html" />
     <Content Include="client-src\js\app.js" />
     <Content Include="client-src\js\overlayEffect.js" />
-    <Content Include="client-src\js\Player.js" />
+    <Content Include="client-src\js\player.js" />
     <Content Include="client-src\js\processor.js" />
-    <Content Include="client-src\index.html" />
     <Content Include="client-src\js\Subtitle.js" />
     <Content Include="client-src\js\subtitlesFactory.js" />
     <Content Include="client-src\js\subtitlesService.js" />
+    <Content Include="client-src\video.html" />
     <Content Include="gulpfile.js" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +119,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".babelrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="client-src\attachment\subs.srt" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
