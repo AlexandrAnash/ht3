@@ -8,6 +8,7 @@
             this.canvas.height = this.video.videoHeight;
         });
         this.video.muted = true;
+        this.isPlay = false;
     }
     load() {
         return new Promise((resolve) => {
@@ -20,9 +21,11 @@
         this.video.play();
         this.draw();
         this.postprocess(overlay);
+        this.isPlay = true;
     }
     pause() {
         this.video.pause();
+        this.isPlay = false;
     }
     draw() {
         if (this.video.paused || this.video.ended) return false;

@@ -5,14 +5,15 @@ const SECOND = 1000,
     HOUR = 60 * MINUTE;
 
 class SubtitleProcessor {
-    constructor(subtitles, player) {
+    constructor(player) {
         this.isPause = false;
-        this.subtitles = subtitles;
-        this.restart();
         this.canvasContext = player.canvasContext;
         this.player = player;
         this.isDraw = false;
-        this.loadSubtitles('attachment/subs.srt');
+        this.loadSubtitles('attachment/subs.srt').then((data) => {
+            this.subtitles = data;
+            this.restart();
+        });
     }
     checkSubtitle(time) {
         if (this.isSubtitleShow) return;
@@ -71,7 +72,7 @@ class SubtitleProcessor {
                 return responce.text();
             })
             .then((data) => {
-                let srt = data.replace(/\r\n|\r|\n/g, '\n');
+                let srt = data.replace(/\r\n|\r/g, '\n');
                 return srt 
                     .split('\n\n')
                     .map((subItem) => this.formattedToSubtitle(subItem));

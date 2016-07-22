@@ -12,42 +12,44 @@ function ContentLoaded() {
     const video = player.video;
     const overlayEffect = new OverlayEffect();
     const overlayVideo = overlayEffect.video;
+    let rifID;
 
     var subtitleProcessor = new SubtitleProcessor(player);
 
     const elementPlay = document.getElementById('player-play');
     const elementPause = document.getElementById('player-pause');
     const elementRestart = document.getElementById('player-restart');
-    let rifID;
     elementPlay.addEventListener('click', playPress.bind(this));
     elementPause.addEventListener('click', pausePress.bind(this));
     elementRestart.addEventListener('click', restartPress.bind(this));
 
     function playPress() {
+        if (player.isPlay) return;
+
         elementPlay.classList.add('btn-yellow');
         elementPause.classList.remove('btn-yellow');
         loop();
-
-        function loop() {
-            subtitleProcessor.checkSubtitle(video.currentTime * 1000);
-            if (subtitleProcessor.isSubtitleShow) {
-                if (subtitleProcessor.isDraw === false) {
-                    player.pause();
-                    subtitleProcessor.play(overlayVideo);
-                } else {
-                    subtitleProcessor.draw();
-                    player.postprocess.call(subtitleProcessor, overlayVideo);
-                }
-            } else {
-                player.play(overlayVideo);
-                audio.play();
-                overlayVideo.play();
-            }
-            rifID = requestAnimationFrame(loop);
-        };
     }
-
+    function loop() {
+        subtitleProcessor.checkSubtitle(video.currentTime * 1000);
+        if (subtitleProcessor.isSubtitleShow) {
+            if (subtitleProcessor.isDraw === false) {
+                player.pause();
+                subtitleProcessor.play(overlayVideo);
+            } else {
+                subtitleProcessor.draw();
+                player.postprocess.call(subtitleProcessor, overlayVideo);
+            }
+        } else {
+            player.play(overlayVideo);
+            audio.play();
+            overlayVideo.play();
+        }
+        rifID = requestAnimationFrame(loop);
+    };
     function pausePress() {
+        if (player.isPlay === false) return;
+
         elementPlay.classList.remove('btn-yellow');
         elementPause.classList.add('btn-yellow');
         cancelAnimationFrame(rifID);
